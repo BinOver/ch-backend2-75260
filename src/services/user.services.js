@@ -2,6 +2,7 @@ import { userDao } from "../dao/user.dao.js";
 import CustomError from "../utils/custom.error.js";
 import { createHash, isValidPassword } from "../utils/user.utils.js";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 class UserService {
   constructor(dao) {

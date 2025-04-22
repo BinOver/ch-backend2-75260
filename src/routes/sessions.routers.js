@@ -2,11 +2,12 @@ import { Router } from "express";
 import bcrypt from "bcrypt";
 import userModel from "../dao/models/user.model.js";
 import { checkRole } from "../middleware/checkRole.js";
+import { userController } from "../controllers/user.controller.js";
 import passport from "passport";
 
 const routerSessions = Router();
 
-routerSessions.post("/register", async (req, res) => {
+/* routerSessions.post("/register", async (req, res) => {
   const { first_name, last_name, email, password, age } = req.body;
   try {
     const existUser = await userModel.findOne({ email: email });
@@ -55,7 +56,10 @@ routerSessions.post("/login", async (req, res) => {
   } catch (error) {
     res.status(500).send("Error interno al logear usuario");
   }
-});
+}); */
+
+routerSessions.post("/register", userController.register);
+routerSessions.post("/login", userController.login);
 
 routerSessions.get(
   "/private-headers",
