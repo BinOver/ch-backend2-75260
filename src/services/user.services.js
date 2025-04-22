@@ -1,6 +1,6 @@
-import { userDao } from "../daos/mongodb/user-dao.js";
+import { userDao } from "../dao/user.dao.js";
 import CustomError from "../utils/custom.error.js";
-import { createHash, isValidPassword } from "../utils/user-utils.js";
+import { createHash, isValidPassword } from "../utils/user.utils.js";
 import jwt from "jsonwebtoken";
 
 class UserService {
@@ -58,3 +58,5 @@ class UserService {
     });
   };
 }
+
+export const userService = new UserService(userDao);

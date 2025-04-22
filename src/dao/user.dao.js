@@ -1,5 +1,5 @@
-import { UserModel } from "./models/user-model.js";
-import MongoDao from "./mongo-dao.js";
+import userModel from "./models/user.model.js";
+import MongoDao from "./mongo.dao.js";
 
 class UserDao extends MongoDao {
   constructor(model) {
@@ -15,4 +15,4 @@ class UserDao extends MongoDao {
   };
 }
 
-export const userDao = new UserDao(UserModel);
+export const userDao = new UserDao(userModel);
