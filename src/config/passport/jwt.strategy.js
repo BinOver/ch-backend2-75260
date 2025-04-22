@@ -24,7 +24,7 @@ const strategyConfigCookies = {
   secretOrKey: process.env.JWT_SECRET,
 };
 
-passport.use("jwt-cookies", new Strategy(strategyConfigCookies, verifyToken));
+passport.use("jwt_cookies", new Strategy(strategyConfigCookies, verifyToken));
 
 passport.serializeUser((user, done) => {
   try {
