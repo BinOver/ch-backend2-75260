@@ -26,11 +26,8 @@ const strategyConfigCookies = {
 
 passport.use("jwt-cookies", new Strategy(strategyConfigCookies, verifyToken));
 
-/* ------------------------------------ serialize y deserialize va siempre ----------------------------------- */
-
 passport.serializeUser((user, done) => {
   try {
-    // console.log(user)
     done(null, user._id);
   } catch (error) {
     done(error);
