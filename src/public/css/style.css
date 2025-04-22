@@ -1,0 +1,40 @@
+h1 {
+    text-align: center;
+    color: grey;
+}
+
+h2 {
+    text-align: center;
+    color: grey;
+}
+
+.containerProducts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.containerProducts div {
+    border: 1px solid grey;
+    padding: 25px;
+
+}
+
+#containerProducts {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#containerProducts div {
+    border: 1px solid grey;
+    padding: 25px;
+
+}
+
+.card {
+    border: 1px solid #ccc;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

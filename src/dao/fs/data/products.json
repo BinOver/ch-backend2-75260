@@ -1,0 +1,68 @@
+[
+  {
+    "title": "Prod 1",
+    "description": "desc prod 1",
+    "price": 345,
+    "thumbnail": "",
+    "code": "adgassd",
+    "stock": 12,
+    "status": true,
+    "category": "category 1",
+    "id": 1
+  },
+  {
+    "title": "Prod 2",
+    "description": "desc prod 2",
+    "price": 45,
+    "thumbnail": "",
+    "code": "adassd",
+    "stock": 133,
+    "status": true,
+    "category": "category 2",
+    "id": 2
+  },
+  {
+    "title": "Prod 3",
+    "description": "desc prod 3",
+    "price": 85,
+    "thumbnail": "",
+    "code": "zdassjd",
+    "stock": 133,
+    "status": true,
+    "category": "category 3",
+    "id": 3
+  },
+  {
+    "title": "Prod 4",
+    "description": "des prod 4",
+    "price": "4353",
+    "thumbnail": "Sin Imagen",
+    "code": "adhghd",
+    "stock": "234",
+    "status": false,
+    "category": "category 4",
+    "id": 4
+  },
+  {
+    "title": "Prod 5",
+    "description": "desc prod 5",
+    "price": "2342",
+    "thumbnail": "Sin Imagen",
+    "code": "dfghftff",
+    "stock": "876",
+    "status": false,
+    "category": "category 5",
+    "id": 5
+  },
+  {
+    "title": "TEST 2",
+    "description": "desc TEST 2",
+    "price": "134",
+    "thumbnail": "Sin Imagen",
+    "code": "dgdasdc23s",
+    "stock": "34",
+    "status": false,
+    "category": "TEST",
+    "id": 6
+  }
+]

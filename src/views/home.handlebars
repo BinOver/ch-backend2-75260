@@ -1,0 +1,43 @@
+<h1>Todos los productos</h1>
+
+<div class="containerProducts">
+        {{#each products}}
+            <div class="card">
+                <p>Nombre: {{this.title}}</p>
+                <p>Descripcion: {{this.description}}</p>
+                <p>Precio: {{this.price}}</p>
+                <p>Codigo: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <p>Categoria: {{this.category}}</p>
+                <form action="/api/carts/66946f23ec00ffb0ea4007a6/product/{{this._id}}" method="POST" target="_self">
+                    <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+                </form>
+            </div>
+        {{/each}}
+</div>
+<ul class="pagination justify-content-center">
+    {{#if hasPrevPage}}
+        <li class="page-item">
+            <a class="page-link" href="/?page={{prevPage}}">Anterior</a>
+        </li>
+    {{else}}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Anterior</a>
+        </li>
+    {{/if}}
+    {{#if hasNextPage}}
+        <li class="page-item">
+            <a class="page-link" href="/?page={{nextPage}}">Siguiente</a>
+        </li>
+    {{else}}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Siguiente</a>
+        </li>
+    {{/if}}
+</ul>
+
+<div class="text-center mt-4">
+    <p>Página actual: {{currentPage}}</p>
+    <p>Total Paginas: {{totalPages}}</p>
+</div>
+

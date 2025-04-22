@@ -1,0 +1,39 @@
+<h1 class="mt-3">Productos en tiempo real</h1>
+<div id="containerProducts"></div>
+
+<form id="productForm">
+<h2 class="mt-5">Formulario para agregar productos</h2>
+    <div class="mb-3">
+        <input type="text" id="title" class="form-control" placeholder="Nombre">
+    </div>
+    <div class="mb-3">
+        <input type="text" id="description" class="form-control" placeholder="Descripción">
+    </div>
+    <div class="mb-3">
+        <input type="number" id="price" class="form-control" placeholder="Precio">
+    </div>
+    <div class="mb-3">
+        <input type="text" id="thumbnail" class="form-control" value="Sin Imagen" placeholder="Imagen">
+    </div>
+    <div class="mb-3">
+        <input type="text" id="code" class="form-control" placeholder="Código">
+    </div>    
+    <div class="mb-3">
+        <input type="number" id="stock" class="form-control" placeholder="Stock">
+    </div>        
+    <div class="mb-3">
+        <input type="text" id="category" class="form-control" placeholder="Categoría">
+    </div>       
+    <div class="mb-3">
+        <select id="status" class="form-select">
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+        </select>        
+    </div>        
+    <div class="mb-3">
+        <button type="button" id="btnSend" class="btn btn-primary">Enviar</button>        
+    </div>
+</form>
+
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+<script src="js/main.js"></script>
