@@ -3,6 +3,8 @@ import CustomError from "../utils/custom.error.js";
 import { createHash, isValidPassword } from "../utils/user.utils.js";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import UserDTO from "../dto/user.dto.js";
+import { sendWelcomeEmail } from "./email.services.js";
 
 class UserService {
   constructor(dao) {
@@ -19,6 +21,7 @@ class UserService {
         password: createHash(password),
       });
       if (!response) throw new CustomError("Error al registrar usuario", 400);
+      await sendWelcomeEmail(email);
       return response;
     } catch (error) {
       throw error;
@@ -39,7 +42,8 @@ class UserService {
 
   getById = async (id) => {
     try {
-      return await this.dao.getById(id);
+      const user = await this.dao.getById(id);
+      return new UserDTO(user);
     } catch (error) {
       throw error;
     }

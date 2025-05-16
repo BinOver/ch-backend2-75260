@@ -1,75 +1,56 @@
 import { Router } from "express";
-//import { ProductManager } from "../dao/fs/ProductManager.js";
-import ProductManager from "../dao/db/ProductManager-db.js";
-
+import { productService } from "../services/product.services.js";
 
 const routerProd = Router();
-const productManager = new ProductManager();
 
-routerProd.get("/",async (req,res) => {
-    try {
-        const { limit = 10, page = 1, sort, query } = req.query;
-        const products = await productManager.getProducts({
-            limit: parseInt(limit),
-            page: parseInt(page),
-            sort,
-            query,
-        });
-
-        res.json({
-            status:'success',
-            payload: products,
-            /* totalPages: products.totalPages,
-            prevPage: products.prevPage,
-            nextPage: products.nextPage,
-            page: products.page,
-            hasPrevPage: products.hasPrevPage,
-            hasNextPage: products.hasNextPage,
-            prevLink: products.hasPrevPage ? `/api/products?limit=${limit}&page=${products.prevPage}&sort=${sort}&query=${query}` : null,
-            nextLink: products.hasNextPage ? `/api/products?limit=${limit}&page=${products.nextPage}&sort=${sort}&query=${query}` : null, */
-        });
-
-    } catch(error){
-        console.error("Se ha producido un erro al obtener los productos",error);
-        res.status(500).send({error: "Error de servidor"})
-    }
+routerProd.get("/", async (req, res) => {
+  try {
+    const products = await productService.getProducts(req.query);
+    res.json({ status: "success", payload: products });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Error al obtener productos", detail: error.message });
+  }
 });
 
-routerProd.get("/:pid", async (req,res) => {
-    const pid = req.params.pid;
-    const prod = await productManager.getProductById(pid);
-    if(prod) {
-        res.status(200).send(prod);
-    } else {
-        res.status(404).send("Producto no encontrado");
-    }
+routerProd.get("/:pid", async (req, res) => {
+  try {
+    const product = await productService.getProductById(req.params.pid);
+    if (!product) return res.status(404).send("Producto no encontrado");
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-routerProd.post("/", async (req,res) => {
-    const confirm = await productManager.addProduct(req.body);
-    if (confirm){
-        res.status(200).send("Producto creado correctamente");
-    } else {
-        res.status(400).send("Producto ya existente");
-    }
+routerProd.post("/", async (req, res) => {
+  try {
+    const created = await productService.addProduct(req.body);
+    res.status(201).send("Producto creado correctamente");
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
-routerProd.put("/:id", async(req,res) => {
-    const confirm = await productManager.updateProduct(req.params.id,req.body);
-    if (confirm){
-        res.status(200).send("Producto actualizado correctamente.");
-    } else {
-        res.status(404).send("Producto ya existente.");
-    }
+routerProd.put("/:id", async (req, res) => {
+  try {
+    const updated = await productService.updateProduct(req.params.id, req.body);
+    if (!updated) return res.status(404).send("Producto no encontrado");
+    res.status(200).send("Producto actualizado correctamente");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-routerProd.delete("/:id", async(req,res) => {
-    const confirm = await productManager.deleteProduct(req.params.id);
-    if (confirm) {
-        res.status(200).send("Producto eliminado correctamente.");
-    } else {
-        res.status(404).send("Producto no encontrado.");
-    }
+routerProd.delete("/:id", async (req, res) => {
+  try {
+    const deleted = await productService.deleteProduct(req.params.id);
+    if (!deleted) return res.status(404).send("Producto no encontrado");
+    res.status(200).send("Producto eliminado correctamente");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 export default routerProd;

@@ -14,6 +14,7 @@ import dotenv from "dotenv";
 import passport from "passport";
 import "./config/passport/jwt.strategy.js";
 import cookieParser from "cookie-parser";
+import routerEmail from "./routes/email.routes.js";
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ app.set("views", "./src/views");
 //Routes api
 app.use("/api/products", routerProd);
 app.use("/api/carts", routerCarts);
+app.use("/api/email", routerEmail);
 /////Sessions
 app.use("/api/sessions", routerSessions);
 
