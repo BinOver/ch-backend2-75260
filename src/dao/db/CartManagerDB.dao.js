@@ -16,6 +16,11 @@ class CartDao extends MongoDao {
   }
 
   async insertProductToCart(cartId, productId, quantity = 1) {
+    quantity = Number(quantity);
+    if (isNaN(quantity) || quantity < 1) {
+      quantity = 1;
+    }
+    console.log("Cantidad solicitada:", quantity, "Tipo:", typeof quantity);
     const cart = await this.getCartById(cartId);
     if (!cart) throw new Error("Carrito no encontrado");
 

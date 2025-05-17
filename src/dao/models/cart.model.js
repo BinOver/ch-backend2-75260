@@ -25,7 +25,6 @@ const autoPopulateProducts = function (next) {
 cartSchema.pre("findOne", autoPopulateProducts);
 cartSchema.pre("find", autoPopulateProducts);
 cartSchema.pre("findOneAndUpdate", autoPopulateProducts);
-cartSchema.pre("findById", autoPopulateProducts);
 
 const CartModel = mongoose.model("carts", cartSchema);
 
