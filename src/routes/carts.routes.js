@@ -103,4 +103,15 @@ routerCarts.delete("/:cid", async (req, res) => {
   }
 });
 
+//Finalizar compra
+// routerCarts.post("/:cid/purchase", async (req, res) => {
+//   try {
+//     const result = await cartService.purchaseCart(req.params.cid);
+//     res.json(result);
+//   } catch (error) {
+//     console.error("Error al finalizar la compra. ", error);
+//     res.status(500).json({ error: "Error al finalizar la compra." });
+//   }
+// });
+
 export default routerCarts;
