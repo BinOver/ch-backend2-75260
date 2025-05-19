@@ -1,37 +1,47 @@
 import passport from "passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
+import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { userService } from "../../services/user.services.js";
 import "dotenv/config";
 
-const strategyConfig = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
-};
-
-const verifyToken = async (jwt_payload, done) => {
-  if (!jwt_payload) return done(null, false, { messages: "Invalid Token" });
-  return done(null, jwt_payload);
-};
-
-passport.use("jwt", new Strategy(strategyConfig, verifyToken));
+passport.use(
+  "jwt",
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.JWT_SECRET,
+    },
+    async (jwt_payload, done) => {
+      if (!jwt_payload) return done(null, false, { message: "Token inválido" });
+      return done(null, jwt_payload);
+    }
+  )
+);
 
 const cookieExtractor = (req) => {
-  return req.cookies.token;
+  return req?.cookies?.token || null;
 };
 
-const strategyConfigCookies = {
-  jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
-  secretOrKey: process.env.JWT_SECRET,
-};
-
-passport.use("jwt_cookies", new Strategy(strategyConfigCookies, verifyToken));
+passport.use(
+  "jwt_cookies",
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+      secretOrKey: process.env.JWT_SECRET,
+    },
+    async (jwt_payload, done) => {
+      if (!jwt_payload) return done(null, false, { message: "Token inválido" });
+      try {
+        const user = await userService.getById(jwt_payload._id);
+        return done(null, user);
+      } catch (error) {
+        return done(error, false);
+      }
+    }
+  )
+);
 
 passport.serializeUser((user, done) => {
-  try {
-    done(null, user._id);
-  } catch (error) {
-    done(error);
-  }
+  done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {

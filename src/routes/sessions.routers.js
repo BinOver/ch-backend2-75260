@@ -27,4 +27,11 @@ routerSessions.get(
   (req, res) => res.send(req.user)
 );
 
+routerSessions.get(
+  "/current",
+  passport.authenticate("jwt_cookies", { session: false }),
+  checkRole("admin"),
+  (req, res) => res.json(req.user)
+);
+
 export default routerSessions;
