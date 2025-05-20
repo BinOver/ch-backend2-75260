@@ -1,13 +1,17 @@
 import { Schema, model } from "mongoose";
+import { nanoid } from "nanoid";
 
 export const ticketSchema = new Schema({
   code: {
     type: String,
     required: true,
+    unique: true,
+    default: () => nanoid(10),
   },
   purchase_datetime: {
-    type: String,
+    type: Date,
     required: true,
+    default: Date.now,
   },
   amount: {
     type: Number,
@@ -19,4 +23,4 @@ export const ticketSchema = new Schema({
   },
 });
 
-export const TicketModel = model("ticket", ticketSchema);
+export const TicketModel = model("Ticket", ticketSchema);

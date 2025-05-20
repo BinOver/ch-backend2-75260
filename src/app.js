@@ -5,7 +5,7 @@ import routerProd from "./routes/products.route.js";
 import routerCarts from "./routes/carts.routes.js";
 import routerViews from "./routes/views.router.js";
 /* import { ProductManager } from "./dao/fs/ProductManager.js"; */
-import ProductManager from "./dao/db/ProductManager-db.js";
+import ProductManager from "../misc/ProductManager-db.js";
 import "./database.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
