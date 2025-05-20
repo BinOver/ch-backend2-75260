@@ -1,5 +1,6 @@
 export const checkRole = (role) => {
   return (req, res, next) => {
+    console.log(req.user, role);
     if (!req.user)
       return res.status(401).send({ status: "error", error: "Unauthorized" });
     if (req.user.role !== role)

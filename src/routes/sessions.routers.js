@@ -16,13 +16,13 @@ routerSessions.get(
 
 routerSessions.get(
   "/private-cookies",
-  passport.authenticate("jwt_cookies"),
+  passport.authenticate("jwt_cookies", { session: false }),
   (req, res) => res.send(req.user)
 );
 
 routerSessions.get(
   "/private-cookies-admin",
-  passport.authenticate("jwt_cookies"),
+  passport.authenticate("jwt_cookies", { session: false }),
   checkRole("admin"),
   (req, res) => res.send(req.user)
 );
@@ -30,8 +30,14 @@ routerSessions.get(
 routerSessions.get(
   "/current",
   passport.authenticate("jwt_cookies", { session: false }),
-  checkRole("admin"),
-  (req, res) => res.json(req.user)
+  checkRole("user"),
+  //(req, res) => res.json(req.user)
+  (req, res) => {
+    res.status(200).json({
+      message: "El usuario se autentico correctamente",
+      user: req.user,
+    });
+  }
 );
 
 export default routerSessions;

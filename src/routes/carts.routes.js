@@ -1,9 +1,10 @@
 import express from "express";
 import { cartService } from "../services/cart.service.js";
+import passport from "passport";
+import { checkRole } from "../middleware/checkRole.js";
 
 const routerCarts = express.Router();
 
-// Crear un nuevo carrito
 routerCarts.post("/", async (req, res) => {
   try {
     const newCart = await cartService.createCart();
@@ -14,7 +15,6 @@ routerCarts.post("/", async (req, res) => {
   }
 });
 
-// Obtener un carrito por ID
 routerCarts.get("/:cid", async (req, res) => {
   try {
     const cart = await cartService.getCartById(req.params.cid);
@@ -26,59 +26,73 @@ routerCarts.get("/:cid", async (req, res) => {
   }
 });
 
-// Actualizar productos del carrito
-routerCarts.put("/:cid", async (req, res) => {
-  try {
-    const updatedCart = await cartService.updateCart(req.params.cid, req.body);
-    res.json(updatedCart.products);
-  } catch (error) {
-    console.error("Error al actualizar el carrito", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-});
-
-// Agregar un producto a un carrito (o actualizar su cantidad)
-routerCarts.post("/:cid/products/:pid", async (req, res) => {
-  try {
-    const quantity = req.body.quantity || 1;
-    const updatedCart = await cartService.insertProductToCart(
-      req.params.cid,
-      req.params.pid,
-      quantity
-    );
-    res.json(updatedCart.products);
-  } catch (error) {
-    console.error("Error al agregar producto al carrito", error);
-    res.status(500).json({
-      error:
-        "Error interno del servidor al intentar agregar productos al carro",
-    });
-  }
-});
-
-// Actualizar cantidad de un producto (mismo endpoint que POST, por diseño podría diferenciarse más)
-routerCarts.put("/:cid/products/:pid", async (req, res) => {
-  try {
-    const quantity = Number(req.body.quantity) || 1;
-    if (isNaN(quantity) || quantity < 1) {
-      quantity = 1;
+routerCarts.put(
+  "/:cid",
+  passport.authenticate("jwt_cookies", { session: false }),
+  checkRole("user"),
+  async (req, res) => {
+    try {
+      const updatedCart = await cartService.updateCart(
+        req.params.cid,
+        req.body
+      );
+      res.json(updatedCart.products);
+    } catch (error) {
+      console.error("Error al actualizar el carrito", error);
+      res.status(500).json({ error: "Error interno del servidor" });
     }
-    const updatedCart = await cartService.insertProductToCart(
-      req.params.cid,
-      req.params.pid,
-      quantity
-    );
-    res.json(updatedCart.products);
-  } catch (error) {
-    console.error("Error al actualizar producto del carrito", error);
-    res.status(500).json({
-      error:
-        "Error interno del servidor el intentar sumar un producto al carro",
-    });
   }
-});
+);
 
-// Eliminar producto específico del carrito
+routerCarts.post(
+  "/:cid/products/:pid",
+  passport.authenticate("jwt_cookies", { session: false }),
+  checkRole("user"),
+  async (req, res) => {
+    try {
+      const quantity = req.body.quantity || 1;
+      const updatedCart = await cartService.insertProductToCart(
+        req.params.cid,
+        req.params.pid,
+        quantity
+      );
+      res.json(updatedCart.products);
+    } catch (error) {
+      console.error("Error al agregar producto al carrito", error);
+      res.status(500).json({
+        error:
+          "Error interno del servidor al intentar agregar productos al carro",
+      });
+    }
+  }
+);
+
+routerCarts.put(
+  "/:cid/products/:pid",
+  passport.authenticate("jwt_cookies", { session: false }),
+  checkRole("user"),
+  async (req, res) => {
+    try {
+      const quantity = Number(req.body.quantity) || 1;
+      if (isNaN(quantity) || quantity < 1) {
+        quantity = 1;
+      }
+      const updatedCart = await cartService.insertProductToCart(
+        req.params.cid,
+        req.params.pid,
+        quantity
+      );
+      res.json(updatedCart.products);
+    } catch (error) {
+      console.error("Error al actualizar producto del carrito", error);
+      res.status(500).json({
+        error:
+          "Error interno del servidor el intentar sumar un producto al carro",
+      });
+    }
+  }
+);
+
 routerCarts.delete("/:cid/products/:pid", async (req, res) => {
   try {
     const updatedCart = await cartService.deleteProductFromCart(
@@ -92,7 +106,6 @@ routerCarts.delete("/:cid/products/:pid", async (req, res) => {
   }
 });
 
-// Vaciar todo el carrito
 routerCarts.delete("/:cid", async (req, res) => {
   try {
     const emptiedCart = await cartService.emptyCart(req.params.cid);
