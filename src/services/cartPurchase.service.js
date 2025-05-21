@@ -7,45 +7,53 @@ export const cartPurchaseService = {
     const cart = await cartDao.getCartById(cartId);
     if (!cart) throw new Error("Carrito no encontrado");
 
-    const productsToPurchase = [];
-    const productsNotAvailable = [];
+    const purchasedProducts = [];
+    const notPurchasedProducts = [];
     let totalAmount = 0;
 
-    for (const item of cart.products) {
-      const product = await productDao.getProductById(item.product._id);
-      if (product && product.stock >= item.quantity) {
-        // Restar stock
-        product.stock -= item.quantity;
-        await productDao.updateProduct(product._id, product);
+    for (const cartItem of cart.products) {
+      const dbProduct = await productDao.getById(cartItem.product._id);
 
-        totalAmount += product.price * item.quantity;
-        productsToPurchase.push(item);
+      if (!dbProduct) {
+        notPurchasedProducts.push(cartItem.product._id);
+        continue;
+      }
+
+      if (dbProduct.stock >= cartItem.quantity) {
+        dbProduct.stock -= cartItem.quantity;
+        await dbProduct.save();
+
+        purchasedProducts.push({
+          product: dbProduct._id,
+          quantity: cartItem.quantity,
+        });
+
+        totalAmount += dbProduct.price * cartItem.quantity;
       } else {
-        productsNotAvailable.push(item);
+        notPurchasedProducts.push(cartItem.product._id);
       }
     }
 
-    if (productsToPurchase.length === 0) {
-      return {
-        message: "No hay productos con stock suficiente",
-        productsNotAvailable,
-      };
+    let ticket = null;
+    if (purchasedProducts.length > 0) {
+      ticket = await ticketService.createTicket({
+        amount: totalAmount,
+        purchaser: userEmail,
+        purchase_datetime: new Date(),
+      });
     }
 
-    // Crear ticket
-    const ticket = await ticketService.createTicket({
-      amount: totalAmount,
-      purchaser: userEmail,
-    });
-
-    // Vaciar el carrito sólo de los productos comprados
-    cart.products = productsNotAvailable;
-    await cartDao.updateCart(cartId, cart.products);
+    const remainingItems = cart.products.filter((item) =>
+      notPurchasedProducts.includes(item.product._id.toString())
+    );
+    await cartDao.updateCart(cartId, remainingItems);
 
     return {
-      message: "Compra realizada con éxito",
+      message: ticket
+        ? "Compra realizada parcialmente o completamente"
+        : "Compra no realizada por falta de stock",
       ticket,
-      productsNotAvailable,
+      notProcessedProducts: notPurchasedProducts,
     };
   },
 };
