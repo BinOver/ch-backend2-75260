@@ -21,6 +21,15 @@ export const ticketSchema = new Schema({
     type: String,
     required: true,
   },
+  products: [
+    {
+      product: {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+      quantity: Number,
+    },
+  ],
 });
 
 export const TicketModel = model("Ticket", ticketSchema);

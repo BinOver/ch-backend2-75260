@@ -40,20 +40,35 @@ export const cartPurchaseService = {
         amount: totalAmount,
         purchaser: userEmail,
         purchase_datetime: new Date(),
+        products: purchasedProducts,
       });
     }
 
     const remainingItems = cart.products.filter((item) =>
       notPurchasedProducts.includes(item.product._id.toString())
     );
-    await cartDao.updateCart(cartId, remainingItems);
+    //await cartDao.updateCart(cartId, remainingItems);
+    await cartDao.replaceCartProducts(cartId, remainingItems);
+
+    const processedProducts = purchasedProducts.map((item) => ({
+      productId: item.product,
+      quantity: item.quantity,
+    }));
+
+    const notProcessedDetailed = await Promise.all(
+      notPurchasedProducts.map(async (prodId) => {
+        const product = await productDao.getById(prodId);
+        return product ? { _id: product._id, title: product.title } : null;
+      })
+    );
 
     return {
       message: ticket
         ? "Compra realizada parcialmente o completamente"
         : "Compra no realizada por falta de stock",
       ticket,
-      notProcessedProducts: notPurchasedProducts,
+      processedProducts,
+      notProcessedProducts: notProcessedDetailed.filter(Boolean),
     };
   },
 };

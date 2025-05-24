@@ -57,6 +57,14 @@ class CartDao extends MongoDao {
     return await cart.save();
   }
 
+  async replaceCartProducts(cartId, newProducts) {
+    const cart = await this.getCartById(cartId);
+    if (!cart) throw new Error("Carrito no encontrado");
+
+    cart.products = newProducts;
+    return await cart.save();
+  }
+
   async deleteCartProductByPID(cartId, productId) {
     const cart = await this.getCartById(cartId);
     if (!cart) throw new Error("Carrito no encontrado");
