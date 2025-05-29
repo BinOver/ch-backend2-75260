@@ -7,6 +7,10 @@ const routerSessions = Router();
 
 routerSessions.post("/register", userController.register);
 routerSessions.post("/login", userController.login);
+routerSessions.post("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.redirect("/");
+});
 
 routerSessions.get(
   "/private-headers",

@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { productDao } from "../dao/db/ProductDB.dao.js";
 import { cartDao } from "../dao/db/CartManagerDB.dao.js";
+import { decodeTokenNoLogin } from "../middleware/decodeTokenNoLogin.js";
 
 const routerViews = Router();
 //const productDAO = new productDAO();
 //const cartDao = new cartDAO();
 
-routerViews.get("/", async (req, res) => {
+routerViews.get("/", decodeTokenNoLogin, async (req, res) => {
+  console.log("Usuario desde token:", req.user);
   try {
     const { page = 1, limit = 10, sort = "", query = "" } = req.query;
 
@@ -17,11 +19,15 @@ routerViews.get("/", async (req, res) => {
       query,
     });
 
+    const cartId = req.user?.cart || null;
+    console.log("cartId: ", cartId);
+
     const productsDocs = products.docs.map((p) => {
       const { _id, ...rest } = p.toObject();
       return { _id, ...rest };
     });
-    console.log(productsDocs);
+    console.log("req.session:", req.session);
+
     res.render("home", {
       products: productsDocs,
       hasPrevPage: products.hasPrevPage,
@@ -32,9 +38,11 @@ routerViews.get("/", async (req, res) => {
       nextLink: products.nextLink,
       currentPage: products.page,
       totalPages: products.totalPages,
+      cartId,
+      user: req.user || null,
     });
   } catch (error) {
-    res.status(500).send("Error interno del servidor");
+    res.status(500).send("Error interno del servidor: " + error.message);
   }
 });
 

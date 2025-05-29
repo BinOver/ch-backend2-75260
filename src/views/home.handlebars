@@ -1,5 +1,17 @@
 <h1>Todos los productos</h1>
-
+{{#if user}}
+  <div class="welcome-message">
+    <h2>¡Bienvenido, {{user.first_name}}!</h2>
+    <form action="/api/sessions/logout" method="POST">
+      <button type="submit" class="btn btn-danger">Cerrar sesión</button>
+    </form>
+  </div>
+{{else}}
+  <div class="login-prompt">
+    <p>No has iniciado sesión.</p>
+    <a href="/login" class="btn btn-primary">Iniciar sesión</a>
+  </div>
+{{/if}}
 <div class="containerProducts">
   {{#each products}}
     <div class="card">
@@ -9,13 +21,17 @@
       <p>Codigo: {{this.code}}</p>
       <p>Stock: {{this.stock}}</p>
       <p>Categoria: {{this.category}}</p>
-      <form
-        action="/api/carts/66946f23ec00ffb0ea4007a6/products/{{this._id}}"
-        method="POST"
-        target="_self"
-      >
-        <button type="submit" class="btn btn-primary">Agregar al carrito</button>
-      </form>
+      {{#if ../user}}
+        <form
+          action="/api/carts/{{../cartId}}/products/{{this._id}}"
+          method="POST"
+          target="_self"
+        >
+          <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+        </form>
+      {{else}}
+        <p><a href="/login">Inicia sesión</a> para agregar productos al carrito.</p>
+      {{/if}}
     </div>
   {{/each}}
 </div>

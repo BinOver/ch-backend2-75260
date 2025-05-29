@@ -57,6 +57,7 @@ class UserService {
       email: user.email,
       age: user.age,
       role: user.role,
+      cart: user.cart?._id || user.cart,
     };
     return jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "20m",
