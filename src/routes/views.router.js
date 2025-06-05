@@ -89,4 +89,13 @@ routerViews.get("/profile", (req, res) => {
   res.render("profile");
 });
 
+routerViews.get("/forgot-password", (req, res) => {
+  res.render("forgotPassword");
+});
+
+routerViews.get("/reset/:token", (req, res) => {
+  const { token } = req.params;
+  res.render("resetPassword", { token });
+});
+
 export default routerViews;

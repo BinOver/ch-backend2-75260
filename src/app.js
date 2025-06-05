@@ -15,6 +15,7 @@ import passport from "passport";
 import "./config/passport/jwt.strategy.js";
 import cookieParser from "cookie-parser";
 import routerEmail from "./routes/email.routes.js";
+import routerPassword from "./routes/password.routes.js";
 
 dotenv.config();
 
@@ -58,6 +59,9 @@ app.use("/api/sessions", routerSessions);
 
 //Routes Views
 app.use("/", routerViews);
+
+//Reset Passord
+app.use("/api/password", routerPassword);
 
 //Server (referencia)
 const httpServer = app.listen(PORT, () => {

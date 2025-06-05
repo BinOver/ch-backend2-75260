@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #121212;
   color: #eee;
+  margin: 0;
+  padding: 0;
 }
 
 h1, h2 {
@@ -50,7 +51,7 @@ h1, h2 {
 }
 
 .login-prompt a.btn {
-  background-color: #2563eb; /* azul más suave, tipo azul cielo oscuro */
+  background-color: #2563eb;
   border-color: #2563eb;
   color: white;
   padding: 8px 16px;
@@ -60,7 +61,89 @@ h1, h2 {
 }
 
 .login-prompt a.btn:hover {
-  background-color: #1e40af; /* azul más oscuro al pasar el mouse */
+  background-color: #1e40af;
   border-color: #1e40af;
   color: white;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.login-form .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.login-form label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #eee;
+}
+
+.login-form input {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2c2c2c;
+  color: #eee;
+  font-size: 16px;
+}
+
+.login-form input:focus {
+  outline: none;
+  box-shadow: 0 0 5px #2563eb;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: #1e40af;
+}
+
+.forgot-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 8px;
+  float: right;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.logout-prompt {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.btn-logout {
+  background-color: #ef4444;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: #b91c1c;
 }
